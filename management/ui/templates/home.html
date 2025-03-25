@@ -6,7 +6,7 @@
     <title>Green Neumorphic Problem Solver</title>
     <style>
         :root {
-            --primary: #10B981;
+            --primary:rgb(16, 185, 83);
             --primary-dark: #059669;
             --bg: #E4E7EB;
             --text: #1F2937;
@@ -87,10 +87,11 @@
             background: transparent;
             border: none;
             resize: none;
-            font-size: 5rem;
-            line-height: 1.6;
+            font-size: 4rem;
+            line-height: 1.4;
             padding: 8px;
             color: var(--text);
+            font-weight: 300;
         }
 
         textarea:focus {
@@ -120,58 +121,6 @@
 
         .btn-primary:hover {
             background: var(--primary-dark);
-        }
-
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 26px;
-        }
-
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--bg);
-            box-shadow: inset 3px 3px 5px var(--shadow),
-                        inset -3px -3px 5px var(--light);
-            transition: .4s;
-            border-radius: 34px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 20px;
-            width: 20px;
-            left: 3px;
-            bottom: 3px;
-            background-color: var(--bg);
-            box-shadow:  2px 2px 4px var(--shadow),
-                        -2px -2px 4px var(--light);
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .slider {
-            box-shadow: inset 3px 3px 5px var(--shadow),
-                        inset -3px -3px 5px var(--light);
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(24px);
-            background: var(--primary);
-            box-shadow:  1px 1px 2px rgba(0,0,0,0.2);
         }
 
         /* Neumorphic Select */
@@ -204,26 +153,6 @@
             opacity: 0.6;
         }
 
-        .solutions-container {
-            flex: 1;
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .solution-card {
-            padding: 16px;
-            margin-bottom: 12px;
-            border-left: 3px solid var(--primary);
-        }
-
-        .solution-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 8px;
-            margin-top: 8px;
-        }
-
         .icon-btn {
             width: 36px;
             height: 36px;
@@ -233,7 +162,97 @@
             justify-content: center;
             cursor: pointer;
         }
+
+        /* Minimal Tree Graph Styles */
+        .tree-container {
+            width: 350px;
+            padding: 24px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tree {
+            flex: 1;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .tree-node {
+            position: relative;
+            margin-bottom: 8px;
+            padding-left: 20px;
+        }
+
+        .tree-node:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 15px;
+            height: 100%;
+            border-left: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .tree-node:after {
+            content: "";
+            position: absolute;
+            top: 18px;
+            left: 0;
+            width: 15px;
+            height: 1px;
+            background: rgba(16, 185, 129, 0.3);
+        }
+
+        .tree-node:last-child:before {
+            height: 18px;
+        }
+
+        .node-content {
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-radius: 6px;
+            background: transparent;
+        }
+
+        .node-content:hover {
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .node-content.active {
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .node-title {
+            font-weight: 500;
+            color: var(--text);
+            font-size: 0.95rem;
+        }
+
+        .node-desc {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-top: 2px;
+        }
+
+        .tree-root {
+            font-weight: 600;
+            color: var(--primary);
+            padding: 8px 0;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .tree-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 12px;
+            gap: 8px;
+        }
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div class="header neumorphic">
@@ -251,7 +270,7 @@
         <div class="sidebar neumorphic">
             <div class="select-container neumorphic">
                 <select>
-                    <option>Current Project</option>
+                    <option>Current Chat</option>
                     <option>Marketing Strategy</option>
                     <option>Product Design</option>
                     <option>User Research</option>
@@ -269,7 +288,7 @@
         </div>
 
         <div class="problem-input neumorphic">
-            <textarea placeholder="Describe your problem in detail..."></textarea>
+            <textarea placeholder="Describe us your problem..."></textarea>
             <div class="controls">
                 <div style="display: flex; gap: 8px;">
                     <div class="neumorphic icon-btn">
@@ -283,47 +302,113 @@
                         </svg>
                     </div>
                 </div>
-                <button class="btn btn-primary">Generate Solutions</button>
+                <button class="btn btn-primary">Analyze Problem</button>
             </div>
         </div>
 
-        <div class="solutions-container neumorphic">
-            <h3 style="margin-bottom: 16px;">Suggested Solutions</h3>
+        <!-- Minimal Tree Graph Section -->
+        <div class="tree-container neumorphic">
+            <div class="tree-root">Problem Structure</div>
             
-            <div class="solution-card neumorphic-inset">
-                <h4>Implement Progressive Disclosure</h4>
-                <p style="margin: 8px 0; opacity: 0.8;">Gradually reveal information to users as they need it, reducing cognitive load.</p>
-                <div class="solution-actions">
-                    <div class="neumorphic icon-btn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
-                        </svg>
+            <div class="tree">
+                <div class="tree-node">
+                    <div class="node-content active">
+                        <div class="node-title">Core Problem</div>
+                        <div class="node-desc">User engagement is declining</div>
                     </div>
-                    <div class="neumorphic icon-btn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                        </svg>
+                </div>
+                
+                <div class="tree-node">
+                    <div class="node-content">
+                        <div class="node-title">User Experience</div>
+                    
+                    <div class="tree">
+                        <div class="tree-node">
+                            <div class="node-content">
+                                <div class="node-title">Complex navigation</div>
+                            </div>
+                        </div>
+                        <div class="tree-node">
+                            <div class="node-content">
+                                <div class="node-title">Slow performance</div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                
+                <div class="tree-node">
+                    <div class="node-content">
+                        <div class="node-title">Content Issues</div>
+                    
+                    <div class="tree">
+                        <div class="tree-node">
+                            <div class="node-content">
+                                <div class="node-title">Outdated information</div>
+                            </div>
+                        </div>
+                        <div class="tree-node">
+                            <div class="node-content">
+                                <div class="node-title">Lack of personalization</div>
+                            </div>
+                        </div>
+                    </div>
                     </div>
                 </div>
             </div>
-
-            <div class="solution-card neumorphic-inset">
-                <h4>Create Guided Onboarding</h4>
-                <p style="margin: 8px 0; opacity: 0.8;">Develop an interactive tutorial that demonstrates key features through practical examples.</p>
-                <div class="solution-actions">
-                    <div class="neumorphic icon-btn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
-                        </svg>
-                    </div>
-                    <div class="neumorphic icon-btn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                        </svg>
-                    </div>
-                </div>
+            
+            <div class="tree-actions">
+                <button class="btn btn-primary" style="padding: 8px 16px; font-size: 0.9rem;">+ Add Node</button>
             </div>
         </div>
     </div>
+
+<script>
+$(document).ready(function() {
+    const textarea = $('textarea');
+    const analyzeBtn = $('.btn-primary');
+    
+    textarea.css({
+        'overflow-y': 'auto',
+        'white-space': 'pre-wrap'
+    }).attr('placeholder', "Describe your problem in detail...");
+    
+    analyzeBtn.click(analyzeProblem);
+    
+    textarea.keydown(function(e) {
+        if (e.ctrlKey && e.key === 'Enter') {
+            e.preventDefault();
+            analyzeProblem();
+        }
+    });
+
+    function analyzeProblem() {
+        const problem = textarea.val().trim();
+        if (!problem) return;
+        
+        analyzeBtn.prop('disabled', true).text('Processing...');
+        textarea.prop('disabled', true);
+        
+        $.ajax({
+            url: '',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ problem: problem }),
+            success: function(data) {
+                textarea.val(`${data.ai_response}`);
+                textarea.scrollTop(textarea[0].scrollHeight);
+            },
+            error: function(xhr) {
+                const error = xhr.responseJSON?.error || 'Unknown error';
+                textarea.val(textarea.val() + `\n\n[ERROR: ${error}]`);
+            },
+            complete: function() {
+                analyzeBtn.prop('disabled', false).text('Analyze Problem');
+                textarea.prop('disabled', false).focus();
+            }
+        });
+    }
+});
+</script>
 </body>
 </html>
